@@ -1,0 +1,64 @@
+<!-- state : 기본적으로 데이터가 저장되는 곳
+특히, 화면에 초기에 렌더링이 된 이후에도 수시로 변화하는 데이터를 저장함 vanilla code에서 counter(횟수)에 해당하는 변수가 그 예시-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- react -->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <!-- reactdom -->
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <!-- JSX 코드를 브라우저가 이해할 수 있도록, js 코드로 변환하기 위하여, 1. Babel을 사용 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- 2. JSX를 감싸고 있는 script 태그에서 type을 설정 -->
+    <script type="text/babel">
+        const root = document.getElementById("root");
+        // 1. 클릭한 카운트를 세기 위하여 counter = 0으로 둔다.
+        // 2. 그렇다면, 변수를 JSX 코드에서 사용하는 방법은 무엇인가? => vanilla js에서는, span.innertext를 이용하여 span의 텍스트를 바꿀 수 있었음.
+        let counter = 0;
+
+        const render = () => {
+            ReactDOM.render(<Container/>, root);
+        }
+
+        // 4. 버튼을 클릭할 때마다 카운터를 갱신하도록, 함수를 만들어준다.
+        const countUp = () => {
+            counter += 1;
+            // 6. re-rendering을 위한 코드를 넣는다.
+            render()
+            // ReactDOM.render(<Container/>, root);
+            // 7. 그런데, 이는 비효율적인 방법이다.
+            // 변수 하나의 값을 바꾸고 화면에 반영하기 위하여, Container(컴포넌트)를 다시 렌더링하는 작업을 거쳐야 하기 때문이다. 무언가 바뀔 때마다 컴포넌트를 리렌더링하는 코드를 작성하는 것은 매우 번거로울 것이다.
+            // 다만 React는 Virtual DOM을 사용하는 만큼, re-rendering을 한다고 하더라도 전부 다 새로 생성되지는 않는다. 이전에 렌더링된 것들과 비교하여 달라진 부분만 변경시키는 만큼, 큰 위력을 가지고 있다. (이는 검사를 통해 확인해볼 수 있음. 버튼을 클릭할 때마다 버튼 그리고 Total Clicks 부분까지 갱신하지는 않고, count 변수만 변경됨을 확인할 수 있다)
+        };
+
+        
+
+        // 3. jsx에서는 중괄호를 열어주고 변수 이름만 담아주면 된다.
+        // 5. 그런데, 이러한 방식으로 진행하면, 버튼을 클릭해도 초기 카운트에서 늘어나지 않음을 확인할 수 있다. 반면, 수 차례 클릭 후 콘솔에서 counter 변수를 입력하면 값이 갱신되어 있다. => 이는, UI에 업데이트가 되지 않았기 때문에 발생한 문제. 지금까지의 코드 중 어디서도 UI를 업데이트 해주는 코드가 없다.(refreshing ui). 코드 상에서, ReactDOM.render() 함수가 초기에 한 번만 수행되고 있기 때문. 즉 re-rendering이 필요
+
+        const Container = () => (
+            <div>
+
+                <h3>
+                    Total Clicks: {counter}
+                </h3>
+
+                <button onClick={countUp}>
+                    Click me
+                </button>
+            </div>
+        );
+
+        render();
+        
+    </script>
+</body>
+</html>
