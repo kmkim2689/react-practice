@@ -1,0 +1,27 @@
+<!-- Vanilla JS로 짠 html 코드 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 총 클릭 수를 보여주는 웹페이지를 만들어보기 
+    바닐라 JS로 만들면, 너무나 많은 코드의 양-->
+    <span>total clicks : 0</span>
+    <button id="btn">click me</button>
+    <script>
+        let counter = 0;
+        const button = document.getElementById("btn");
+        const span = document.querySelector("span");
+        button.addEventListener("click", function() {
+            counter += 1;
+            span.innerText = `Total Clicks: ${counter}`;
+            console.log("i have been clicked.")
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+<!-- createElement를 대체할 수 있는 방법 : JSX-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- react -->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <!-- reactdom -->
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <!-- JSX 코드를 브라우저가 이해할 수 있도록, js 코드로 변환하기 위하여, 1. Babel을 사용 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- 2. JSX를 감싸고 있는 script 태그에서 type을 설정 -->
+    <script type="text/babel">
+        const root = document.getElementById("root");
+        // const Title = (
+        //     <h3 id="title" onMouseEnter={() => {console.log("mouse entered")}}>
+        //         Hello I'm a title
+        //     </h3>
+        // );
+
+        // const Button = (
+        //     <button 
+        //         style={{backgroundColor: "tomato"}} onClick={() => {console.log("i'm clicked")}}>
+        //         Click me
+        //     </button>
+        // );
+
+        // const container = React.createElement("div", null, [Title, Button]);
+
+        // element에 1개 이상의 다른 element를 넣고 싶을 때
+        // 1. element(Component)들을 함수로 만들어준다. 여기서 주의해야 할 점은, 컴포넌트 변수명의 첫 글자는 반드시 대문자여야 한다는 것이다.
+        // 이유 : react와 jsx에서 사용하는 태그와 구분하기 위함. 예를 들어, button은 html 및 jsx에서 사용하는 것이고, Button은 사용자가 직접 지정하는 컴포넌트일 것이다.
+        // 결국, 직접 만들어놓은 컴포넌트를 다른 곳에서 사용할 수 있도록 하기 위해서는, 변(함)수명의 첫 글자는 대문자로 해야 한다는 것임.
+        
+        const Title = () => (
+            <h3 id="title" onMouseEnter={() => {console.log("mouse entered")}}>
+                Hello I'm a title
+            </h3>
+        );
+
+        const Button = () => (
+            <button 
+                style={{backgroundColor: "tomato"}} onClick={() => {console.log("i'm clicked")}}>
+                Click me
+            </button>
+        );
+
+        // 2. 위에서 추가한 함수들을 사용할 곳에서 이 함수들을 마치 HTML 태그인 것 마냥 사용한다. ***물론 div 내부에서 컴포넌트뿐만 아니라, 일반 html 태그도 사용 가능하다.
+        const Container = () => (
+            <div>
+                <button>hello</button>
+                <Title />
+                <Button />
+            </div>
+        );
+
+        ReactDOM.render(<Container/>, root);
+        
+    </script>
+</body>
+</html>
+<!-- 
+JSX 코드로 자동 변환하는 방법
+1의 vscode 익스텐션 => 우리 파일 목록 보이는 곳 좌측에 5개 아이콘 중 '정사각형 블록에서 블록 하나 옆에 빠져 있는 것' 클릭. 거기서 pretter 검색하면 맨 위에 알록달록한 P 모양 나오는거 그거 클릭. 거기서 우측 창에 있는 [설치] 클릭.
+
+2. user settings -> 그 아이콘들 맨 밑에 톱니바퀴 모양 클릭. 뜨는 목록에서 '설정' 클릭. 그러면 '설정'이라는 페이지가 뜨고, 그 밑에 회색으로 뭔가 검색 가능한 영역이 있음. 그 칸을 클릭하고 아래의 행동을 실행,
+
+2.1 default formatter 검색 -> 회색 표시 되어있고 클릭하면 목록 중 고를 수 있는 부분이 있을 것임. 거기 클릭. 'Prettier - Code formatter'를 찾아서 클릭.
+
+2.2 format on save 검색 -> default formatter 지우고 format on save 검색. 체크할 수 있는 것이 딱 하나 뜨는데, 그거 클릭하시면 됨.
+ -->
