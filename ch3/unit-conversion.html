@@ -19,6 +19,11 @@
 
     <script type="text/babel"> 
         const root = document.getElementById("root");
+            // JSX를 사용할 때, html 코드를 사용해도 되기는 하지만, html과 jsx는 비슷하지만 다른 점들이 있기 때문에 그 점들에 유의하여 JSX 코드를 짜야 한다.
+            // class, for 등 JSX에서는 사용할 수 없는 속성들이 있다. => JSX에서는 각각 className, htmlFor라는 이름으로 사용된다. JSX 코드에서 HTML 코드로 변환될 때 알아서 class, for로 변환된다.
+
+            // react code로, input에 어떤 숫자를 적었는지 추적할 수 있다. react에서는, 이러한 input은 uncontrolled라고 알려져 있다. input의 value는 통제할 수 없다는 의미이다. 
+
         function App() {
             // JSX를 사용할 때, html 코드를 사용해도 되기는 하지만, html과 jsx는 비슷하지만 다른 점들이 있기 때문에 그 점들에 유의하여 JSX 코드를 짜야 한다.
             // class, for 등 JSX에서는 사용할 수 없는 속성들이 있다. => JSX에서는 각각 className, htmlFor라는 이름으로 사용된다. JSX 코드에서 HTML 코드로 변환될 때 알아서 class, for로 변환된다.
@@ -82,7 +87,7 @@
                     </div>
 
                     <button onClick={reset}>Reset</button>
-                    <button onClick={onFlip}>Flip</button>
+                    <button onClick={onFlip}>{flipped ? "hour" : "minute"}</button>
                     
                 </div>
             );

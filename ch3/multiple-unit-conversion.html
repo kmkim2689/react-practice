@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- react -->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <!-- reactdom -->
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <!-- JSX 코드를 브라우저가 이해할 수 있도록, js 코드로 변환하기 위하여, 1. Babel을 사용 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- 2. JSX를 감싸고 있는 script 태그에서 type을 설정 -->
+
+    <!-- 
+    할일 = 메뉴바 만들기. 여러 단위를 변환해볼 수 있도록...
+    분/시간 변환기와 마일/킬로미터 변환기
+     -->
+
+    <script type="text/babel"> 
+        const root = document.getElementById("root");
+
+        // 변환기1. 시간-분
+        function MinutesToHours() {
+
+            const [amount, setAmount] = React.useState(0);
+            const [flipped, setFlipped] = React.useState(false);
+            const onChange = (event) => {
+                console.log(event.target.value);
+                setAmount(event.target.value);
+            }
+
+            const reset = () => {
+                setAmount(0);
+            }
+
+            const onFlip = () => {
+                reset();
+                setFlipped((current) => !current);
+            }
+
+            return (
+                <div>
+                    <div>
+                        <label htmlFor="minutes">Minutes</label>
+                        <input value={flipped ? amount * 60 : amount} id="minutes" placeholder="Minutes" type="number"
+                        onChange={onChange}
+                        disabled={flipped}/>
+                    </div>
+                    <div>
+                        <label htmlFor="hours">Hours</label>
+                        <input value={flipped ? amount : (amount / 60).toFixed(0)} id="hours" placeholder="Hours" type="number"
+                        disabled={!flipped}
+                        onChange={onChange}/>
+                    </div>
+
+                    <button onClick={reset}>Reset</button>
+                    <button onClick={onFlip}>{flipped ? "hour" : "minute"}</button>
+                    
+                </div>
+            );
+        }
+        // 변환기2. km-mi
+        function KmToMiles() {
+            const [distance, setDistance] = React.useState(0);
+            const [inverted, setInverted] = React.useState(false);
+            const onChangeDistance = (event) => {
+                console.log(event.target.value);
+                setDistance(event.target.value);
+            }
+
+            const resetDistance = () => {
+                setDistance(0);
+            }
+
+            const onFlipUnit = () => {
+                resetDistance();
+                setInverted((current) => !current);
+            }
+
+            return (
+                <div>
+                    <div>
+                        <label htmlFor="kms">Km</label>
+                        <input value={inverted ? distance * 60 : distance} id="kms" placeholder="Kms" type="number"
+                        onChange={onChangeDistance}
+                        disabled={inverted}/>
+                    </div>
+                    <div>
+                        <label htmlFor="miles">Miles</label>
+                        <input value={inverted ? distance : (distance / 60).toFixed(0)} id="miles" placeholder="Miles" type="number"
+                        disabled={!inverted}
+                        onChange={onChangeDistance}/>
+                    </div>
+                    <button onClick={resetDistance}>Reset</button>
+                    <button onClick={onFlipUnit}>{inverted ? "kms" : "miles"}</button>
+                    
+                </div>
+            );
+        }
+        // 변환기를 고르기 위하여 존재
+        function App() {
+            // index를 이용하여, 숫자에 따라 사용할 변환기를 결정
+            // select html 태그의 value 속성을 통하여 기본값을 결정
+            // option html 태그의 value 속성을 통해 사용할 값을 결정
+            const [ index, setIndex ] = React.useState("x");
+            const onSelect = (event) => {
+                console.log(event);
+                console.log(event.target.value);
+                setIndex(event.target.value);
+            }
+            // JSX 작성 중 js 코드(조건문)를 중간에 쓰고 싶다면 {}를 사용
+            return (
+                <div>
+                    <h1>Converter</h1>
+                    <select value={index} onChange={onSelect}>
+                        <option value="x">Select units</option>
+                        <option value="0">Minutes - Hours</option>
+                        <option value="1">Kms - Miles</option>    
+                    </select>
+                    <hr/>
+                    {
+                        index === "x" ? "Please Select Units" : null
+                    }
+                    {
+                        index === "0" ? <MinutesToHours /> : null
+                    }
+                    {
+                        index === "1" ? <KmToMiles /> : null
+                    }
+                </div>
+            );
+        }
+        ReactDOM.render(<App />, root);
+    </script>
+</body>
+</html>
