@@ -1,0 +1,67 @@
+<!-- 같은 것을 react로 만들어보기 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 루트 element를 생성. 모든 element는 어떠한 element에 속해야 하기 때문에 이것을 꼭 만들어주어야 함. -->
+    <!-- ReactDOM이 element들을 여기에 가져다놓을 것임. -->
+    <div id="root"></div>
+    
+    <!-- js설치를 위하여 2개의 js 코드를 import
+    import 작업만을 마친 후에는 웹페이지에 아무것도 보이지는 않을 것이지만, 콘솔에서 React를 입력하면 결과를 확인할 수 있어야 한다. => 이제 React클래스를 사용할 수 있게 된다. 즉 React.메소드명() 등의 형태로 리액트의 기능을 사용할 수 있게 된다. -->
+    <!-- react -->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js">
+    </script>
+    <!-- reactdom -->
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js">
+    </script>
+    <script>
+        // react의 핵심 : html의 내용을 조작하고 업데이트한다. element를 만들고, 원하는 곳에 element를 렌더링한다. react에서는 이러한 작업이 javascript로 작성한 코드를 html로 변환하는 방식으로 이뤄진다.
+        // react.js에서 element를 어떻게 생성하는가
+        // react.js의 규칙 중 하나 : html을 직접 작성하지 않는다.
+        // 어느 element(예 : button, h3)이든 생성을 위해 자바스크립트를 사용한다.
+
+        // react에서 element를 생성하는 방식(js 코드를 통하여 React.createElement()) => JSX라는 더 간단한 방식이 있기 때문에 개발에 사용되는 것은 지양됨
+        // React.createElement()의 인자들
+        // 첫 번째 인자 : 'html'에서 사용하는 태그명 그대로 쓰거나, 사용자가 직접 지정한 컴포넌트명을 사용.
+        // 두 번째 인자 : 해당 element의 속성을 담아놓은 객체
+        // 예를 들어, h3 html 태그의 속성을 두 번째 인자를 통해 직접 지정해줄 수 있는 것임. 만약 h3 태그의 아이디를 설정하고 싶다면, {id: "아이디명"} 형태로 설정해주면 된다. 물론 ,로 구분하여 여러 개를 넣을 수도 있다.
+        // ***그런데, 단순히 태그의 속성을 설정하는 것뿐만 아니라, '이벤트 등도 정의할 수 있다.(addEventListener의 첫 번째 인자)' => onClick, onMouseEnter 등등
+        // 여기서 js와는 다르게 리액트에서는 eventlistener명은 on+이벤트명으로 이뤄짐을 알 수 있다.
+        // 세 번째 인자 : 자식 요소(의 배열). 즉, 태그 안에 들어갈 '내용'을 정의한다. h3에 무언가 보이게 하고 싶을 때 세 번째 인자에 넣으면 되는것.
+        const h3 = React.createElement("h3", {
+            onMouseEnter: () => {console.log('mouse enter')}, style: {backgroundColor:"tomato"}
+        }, "Hello, I'm a h3");
+        const root = document.getElementById("root");
+        // 변수의 이름은 html의 태그명과 일치하지 않아도 된다.
+        // createElement를 통해 바닐라코드에서 html에 태그를 쓰고, 변수를 선언하고, 이벤트를 선언하는 작업들을 1줄로 대체함
+        const btn = React.createElement("button", {
+            onClick: () => console.log("I'm clicked.")
+        }, "click me");
+
+        // element를 만들었으니, 이제 h3(element)을 페이지(즉, body)에 두어야 할 것임.
+        // 이를 위하여, react-dom을 사용해야 한다. 결국 react-dom은 react element를 html에 두는 역할을 한다는 것을 알 수 있음
+        // render() : react element를 html 코드로 만들어 배치하는 기능 => 즉 사용자가 element를 볼 수 있도록 하는 함수
+        // 인자
+        // 1. element명(변수)
+        // 2. 해당 element를 둘 장소(html 태그를 담은 변수)
+
+        // 이 코드로 인하여, 실행 시 div(id가 root)태그 안에 h3 태그가 들어가게 됨(h3 태그는 html에 직접 작성하지 않음)
+        // ReactDOM.render(h3, root);
+
+        // 버튼 렌더링하기
+        // ReactDOM.render(btn, root);
+
+        // 만약 2개 이상의 element를 rendering 하고 싶다면? : 2개를 담을 div를 생성하고, 세 번째 인자(렌더링할 요소. 자식 요소)에 변수들에 대한 list를 만들어서 넣는다
+        // 개발자 도구를 확인해보면, root(div)안에 container(div)가 존재하고, 그 안에 자식요소들로 h3, button 태그들이 존재함을 확인 가능
+        const container = React.createElement("div", null, [h3, btn])
+        ReactDOM.render(container, root);
+
+    </script>
+</body>
+</html>

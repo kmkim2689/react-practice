@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- react -->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <!-- reactdom -->
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <!-- JSX 코드를 브라우저가 이해할 수 있도록, js 코드로 변환하기 위하여, 1. Babel을 사용 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- 2. JSX를 감싸고 있는 script 태그에서 type을 설정 -->
+
+    <script type="text/babel"> 
+        const root = document.getElementById("root");
+            // JSX를 사용할 때, html 코드를 사용해도 되기는 하지만, html과 jsx는 비슷하지만 다른 점들이 있기 때문에 그 점들에 유의하여 JSX 코드를 짜야 한다.
+            // class, for 등 JSX에서는 사용할 수 없는 속성들이 있다. => JSX에서는 각각 className, htmlFor라는 이름으로 사용된다. JSX 코드에서 HTML 코드로 변환될 때 알아서 class, for로 변환된다.
+
+            // react code로, input에 어떤 숫자를 적었는지 추적할 수 있다. react에서는, 이러한 input은 uncontrolled라고 알려져 있다. input의 value는 통제할 수 없다는 의미이다. 
+
+        function App() {
+            // JSX를 사용할 때, html 코드를 사용해도 되기는 하지만, html과 jsx는 비슷하지만 다른 점들이 있기 때문에 그 점들에 유의하여 JSX 코드를 짜야 한다.
+            // class, for 등 JSX에서는 사용할 수 없는 속성들이 있다. => JSX에서는 각각 className, htmlFor라는 이름으로 사용된다. JSX 코드에서 HTML 코드로 변환될 때 알아서 class, for로 변환된다.
+
+            // react code로, input에 어떤 숫자를 적었는지 추적할 수 있다. react에서는, 이러한 input은 uncontrolled라고 알려져 있다. input의 value는 통제할 수 없다는 의미이다. 
+
+            // state를 만들어준다.
+            const [amount, setAmount] = React.useState(0);
+
+            // 시간과 분 입력 여부를 바꿔주기 위해 flipped라는 state 마련
+            const [flipped, setFlipped] = React.useState(false);
+
+            // input의 값을 지정해주는 속성 : value - 초깃값을 명시한다.(number, text, password 등의 경우)
+
+            // 여기서 하고자 하는 것 : 사용자가 다른 값을 입력할 때마다 value를 업데이트 시키는 것 - 핵심 : onChange 속성
+
+            // onChange 함수와 value  속성 두 가지 모두를 사용해야 변경 사항이 업데이트가 된다.
+
+            // 변화된 내용을 알기 위하여, onChange 함수의 인자로 event를 넣어준다. 그리고 console에 출력해보면, event라는 이름의 Syntheticevent 객체가 출력된다. 그 안에 target이 있고, 그 안에 value가 있는데, 그곳에 변경된 값이 저장되어 있다. 따라서 변경된 값은 event.target.value를 통해 가져올 수 있게 된다.
+
+            // 다른 input text에도 value를 같은 minutes를 적용하면, 첫 번째 input에서 변화가 일어나면 똑같은 값으로 두번째 input에서도 변화가 일어남을 알 수 있다.(첫 번째 input에서 onChange 이벤트를 감지하기 때문)
+            const onChange = (event) => {
+                console.log(event.target.value);
+                setAmount(event.target.value);
+            }
+
+
+            const reset = () => {
+                setAmount(0);
+            }
+
+            const onFlip = () => {
+                reset();
+                // 현재의 flipped 상태를 기반으로, 다음 상태를 결정(toggle)
+                setFlipped((current) => !current);
+                // 참고 : setFlipped((current) => {!current});라고 하면 부정의 부정이 된다...
+                // setFlipped((current) => {!current})와 같이 함수에 논리 부정 연산자(!)를 적용하면, 이전 상태값이 불리언(Boolean) 타입인 경우에는 현재 상태값을 반전시킬 수 있습니다. 예를 들어, flipped가 true인 경우 setFlipped((current) => {!current})를 호출하면 !current는 false가 되고, 다시 !false를 하여 true를 유지합니다. 따라서 flipped 값은 변하지 않습니다.이유는 ! 연산자는 불리언 값을 뒤집는 역할을 합니다. 즉, true 값을 false로, false 값을 true로 변경합니다. 따라서, setFlipped((current) => {!current})에서는 이전 상태값을 반전시킨 후, 다시 부정하여 현재 상태값을 유지하는 것입니다. 하지만, 이전에 말씀드린 것처럼, setFlipped((current) => !current)와 같이 논리 부정 연산자(!)를 적용하지 않고, 함수 내에서 이전 상태값을 반전시키는 것도 가능합니다. 이 경우에는 이전 상태값을 기반으로 계산된 새로운 값을 반환하게 됩니다.따라서, setFlipped((current) => !current)와 setFlipped((current) => {!current})의 차이점은, 전자는 이전 상태값을 반전시킨 값을 새로운 상태값으로 설정하고, 후자는 이전 상태값을 반전시킨 후, 다시 부정하여 현재 상태값을 유지한다는 것입니다.
+                // 좋지 못한 방법
+                // setFlipped(!flipped);
+            }
+
+            return (
+                <div>
+                    <h1>
+                        Converter
+                    </h1>
+                    <div>
+                        <label htmlFor="minutes">Minutes</label>
+                        <input value={flipped ? amount * 60 : amount} id="minutes" placeholder="Minutes" type="number"
+                        onChange={onChange}
+                        disabled={flipped}/>
+                    </div>
+                    
+                    <h3>You want to convert {event.target.value}</h3>
+
+                    <div>
+                        <label htmlFor="hours">Hours</label>
+                        <input value={flipped ? amount : (amount / 60).toFixed(0)} id="hours" placeholder="Hours" type="number"
+                        disabled={!flipped}
+                        onChange={onChange}/>
+                    </div>
+
+                    <button onClick={reset}>Reset</button>
+                    <button onClick={onFlip}>{flipped ? "hour" : "minute"}</button>
+                    
+                </div>
+            );
+        }
+        ReactDOM.render(<App />, root);
+    </script>
+</body>
+</html>
