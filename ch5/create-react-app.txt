@@ -1,0 +1,48 @@
+* proptypes를 리액트 프로젝트에 설치하는 방법
+터미널에
+npm i prop-types 입력
+그 후, prop-types를 사용할 곳에 import를 한다.
+import PropTypes from "prop-types";
+
+* proptypes를 사용하는 이유
+부모로부터 전달받은 prop의 데이터 type을 검사
+자식 컴포넌트에서 명시해놓은 데이터 타입과 부모로부터 넘겨받은 데이터 타입이 일치하지 않으면, 콘솔에서 에러 발생.
+컴포넌트의 로직을 이해하지 않고도 타입 정보를 한눈에 파악 가능
+
+* 사용법
+클래스명.propTypes = {
+    변수명: PropTypes.설정할 자료형
+};
+
+* propTypes로 들어갈 수 있는 종류들
+1. element(리액트 요소. 태그명이나 클래스명)
+2. instanceOf(클래스명)
+3. arrayOf(PropTypes.number 등...) : 특정 타입만 포함하는 배열
+4. oneOfType([PropTypes.number, PropTypes.string]) : 넘버, 문자열 중 어느 하나를 만족하면 됨
+5. shape({}) : 객체의 속성값 타입 정의
+6. string, number 등
+
+* create-react-app으로 작업할 때,
+두 가지 방식으로 CSS 파일을 사용할 수 있다.
+1. CSS 파일을 하나 따로 만든다. 일반적인 방식.
+-> CSS를 사용할 js 파일에서, import를 한다.
+ex) import "./styles.css"
+
+2. 컴포넌트 내부에서 직접 style 속성을 지정
+전역적으로 특정 태그의 style을 설정하려 할 때...
+style={{
+
+}}
+
+3. css 파일을 사용할 때, 원하지 않는 부분까지 적용되는 경우가 있을 것이다. 이것을 방지하기 위하여 css modules을 사용. => 이 방법을 사용하는 것이 좋음
+
+사용법
+
+- 파일명.module.css 파일을 만든다. .module.css는 필수이다.
+- 클래스명을 정하고(.btn), 사용할 속성들을 넣는다.
+- css 파일을 적용할 태그가 있는 파일에서 import를 한다.
+- 클래스에서 적용할 태그 내부에 className 속성을 설정한다. css 파일에서 btn이라고 설정하였으므로, import한 이름.클래스명 형태로 className을 설정
+
+이렇게 하면, 실제로 웹페이지에 렌더링 시, 랜덤한 이름의 class명이 나오게 된다. 이는 같은 스타일을 독립적으로 여러 다른 태그에 사용할 수 있게 해줌.
+
+독립적인 module.css 파일에서, 같은 클래스명을 사용한다고 해도 무방하다.
