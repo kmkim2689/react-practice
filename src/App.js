@@ -3,105 +3,54 @@ import styles from './App.module.css';
 import Button from './Button';
 
 function App() {
-  // const [counter, setCounter] = useState(0);
-  // const [keyword, setKeyword] = useState("");
-  // const onChange = (event) => {
-  //   setKeyword(event.target.value);
-  // }
-  // const onClick = () => {
-  //   setCounter((prev) => prev + 1);
-  // }
-  // // 컴포넌트가 처음으로 render될 때, console에 rendered가 찍힘
-  // // state 변수에 변화가 생기면, 당연히 해당 컴포넌트 전체 차원에서 재렌더링이 일어나기 때문에 rendered가 또 찍힘.
-  // // 여기서 문제점 : 
-  // // 다시 render될 때마다 반복실행되어도 괜찮은 코드가 있는 반면, 하지만, 그렇게 하지 않고 component가 처음 렌더링 될 때에만 컴포넌트의 코드가 실행되도록 해야 할 때가 있음. 즉 첫번째 렌더링 때에만 코드가 실행되도록 해야 할 때가 있음..
-  // // 예를 들어, API를 통해 데이터를 가져올 때, 처음 렌더링 할 때에만 API를 호출하도록 하는 것이 훨씬 효율적일 것임. 
-  // // 이것을 effect를 통해 해결할 수 있음.
-  // // useEffect : 2개의 인자를 가지는 function
-  // // 첫 번째 인자 : 컴포넌트가 처음 렌더링될 때 딱 한번만 실행하고 싶은 코드(화살표 함수를 직접 넣어도 되고, 함수명을 넣어도 되는 등)
-  // // 두 번째 인자 : dependencies 배열이 들어감. 배열 안에는 변화를 감지할 변수들을 넣는다. 그리고 그 변수들에 대한 변화가 일어날 때 첫번째 인자에 넣은 함수가 실행되는 것이다. 참고로, 빈 배열이 주어지면, 그 코드는 처음 렌더링될 때 한번만 실행됨을 의미한다. 지켜볼 것이 없기ㅣ 때문
+  const [toDo, setToDo] = useState("");
+  const onChange = (event) => setToDo(event.target.value);
+  // 4. 여러개의 todo를 받기 위하여 빈 array를 하나 정의한다
+  const [toDos, setToDos] = useState([]);
+  console.log(toDo);
+  // 2. 새로고침되는 것을 방지하기 위하여, event 하위의 preventDefault 함수를 이용
+  const onSubmit = (event) => {
+    event.preventDefault();
+    // 3. 아무것도 입력 안해놓고 submit되는 것을 막기 위하여 조건을 걸어줌
+    if (toDo === "") {
+      return;
+    } else {
+      // 5. 배열에 추가. 그런데 state변수이므로 push를 통해 직접 넣을 수는 없음. 직접 state 변수를 수정할 수는 없기 때문에, setState를 사용한다. 인자에는 함수를 넣는데, 들어가는 함수의 인자로 기존의 state변수 값이 넘어가게 된다.
+      // 이 과정에서, 기존의 배열에서 새로운 원소를 추가하여 새로운 배열을 만들고 싶을 때, 스프레드 연산자를 사용하면 된다. 그냥 [toDo, currArray]이런식으로 하면 배열 안에 currArray배열이 다시 들어가는 형태가 되어버림.
+      // 결국, state 변수 변경을 위해, setState 함수에 어떤 특정 값을 넣어줄 수도 있고, 함수를 넣어줄 수도 있다는 것이 된다. 만약 함수를 넣어준다면, 첫번째 인자로 현재 state 값을 보낸다. 이름은 무엇을 하든 자유
+      setToDos((currArray) => [toDo, ...currArray])
+      setToDo("");
+      // 여기서 로그를 찍어보면 최근에 추가한 것이 반영이 되어있지 않음...
+      // console.log(toDos);
+    }
+  };
+  console.log(toDos);
 
-  // // 만약, 상단에 검색창을 두기 위해 input(type text)을 두고, state변수를 검색창에 들어가는 글자로 지정한다면, onChange를 설정함으로써 글자를 추가하거나 삭제할 때마다 state의 변경이 일어나기 때문에 코드 재실행 및 렌더링이 수도 없이 일어나게 된다. 이는 매우 비효율적이다. 
-
-  // // 다른 문제점으로는, keyword 이외에 다른 state변수(counter)가 변화할 때에도 검색이 다시 이뤄진다는 것이다. 이러한 관심사 분리를 위하여 effect 함수가 필요한 것이다.
-
-  // // 코드의 특정한 부분만이 변화했을 때, 원하는 코드들만 실행되도록 하는 방법이 필요함
-
-  // console.log('rendered');
-  // useEffect(() => {
-  //   console.log("call the api")
-  // }, []);
-
-  // // keyword가 변화할 때에만 함수를 실행하도록 하는 effect
-  // useEffect(() => {
-  //   // 처음 렌더링 될 때에는 검색을 하지 않도록 하기 위해 조건을 걸어줌
-  //   if (keyword !== "" && keyword.length > 5) {
-  //     console.log("search for", keyword);
-  //   }
-  // }, [keyword]);
-
-  // useEffect(() => {
-  //   console.log("counter changed", counter);
-  // }, [counter]);
-
-  // useEffect(() => {
-  //   console.log("keyword or counter changed");
-  // }, [counter, keyword]);
-  
-  // return (
-  //   <div>
-  //     <input type="text" placeholder='search here' value={keyword} onChange={onChange} />
-  //     <h1>
-  //       {counter}
-  //     </h1>
-  //     <button onClick={onClick}>click me</button>
-  //   </div>
-  // );
-
-  // cleanup function
-  // 일례로, 검사에서 element 메뉴에서 태그들을 보면, 버튼을 누를 때마다 구성되는 태그들이 변경되는 것을 알 수 있다. 특히나, h1 태그가 버튼을 클릭함에 따라 dom에서 사라지기도 하고(hide) 다시 생기기도(show) 한다. => destroy. 아예 코드에도 남아있지 않고 사라짐.
-  // 특정 component가 destroy될 때에도 원하는 코드를 실행할 수 있음
-  
-  const [showing, setShowing] = useState(false);
-  const onClick = () => setShowing((prev) => !prev);
+  // form 태그 하위의 onSubmit 콜백 : 폼이 버튼 클릭 등을 통해 제출되었을 때의 동작을 정의
   return (
     <div>
-      {showing ? <Hello /> : null}
-      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
+      <h1>My ToDos ({toDos.length})</h1>
+      <form onSubmit={onSubmit}>
+        <input onChange={onChange} value={toDo} type='text' placeholder="write your to dos" />
+        {/* 1. 버튼 태그의 경우, 기본적으로 설정된 동작 타입이 submit이므로 버튼을 누르면 기본적으로 제출로 처리되어 새로고침됨 */}
+        <button>Add To Do</button>
+      </form>
+      <hr />
+      {/* toDos 배열 안의 아이템들을 각각 하나의 컴포넌트로 만들어주기 위하여, map() 함수를 이용 
+      map() 안에 들어가는 것은 함수인데, 그 함수는 배열의 모든 요소에 대해 각각 실행된다는 특징이 있음. 모든 요소에 대해 실행되고 그 변경된 값은 toDos 배열로 다시 산출된다. 즉 toDos 배열이 새로운 값을 변경되어 출력된다는 것.
+      map안에 들어가는 함수의 매개변수 중 첫번째 매개변수를 이용할 수 있는데(이름은 무엇이든 상관없음), 그 매개변수는 배열의 현재 처리되는 item을 가리킨다. 
+      추가적으로, 리액트에서는 li의 각 요소에 key값을 설정해주어야 한다. 각 li 요소를 구분해야 하기 때문(콘솔 경고 방지). 따라서, map 함수의 두번째 매개변수인 index값을 이용하여 key값을 설정한다.*/}
+      <ul>
+        {toDos.map((item, index) => 
+          <li key={index}>{item}</li>
+        )}
+      
+      </ul>
+      
     </div>
   );
-  
 }
 
-function Hello() {
-  function byeFunc() {
-    console.log("bye");
-  }
-
-  function hiFunc() {
-    console.log("hi");
-    return byeFunc;
-  }
-
-  useEffect(hiFunc, []);
-
-  // useEffect(() => {
-  //   console.log("component created!")
-  //   // useEffect 첫번째 인자 함수 내부에서 return문으로 반환하는 함수 : component가 destroy되면서 실행되는 코드 => cleanup function!!
-  //   // 이것을 통하여, component가 언제 create되었는지, 언제 destroy되었는지 알 수 있음...
-  //   return () => console.log("component destroyed!");
-  // }, []);
-
-  return (
-    <h1>hello</h1>
-  );
-}
-
-// 버튼 클릭시, created :) , destroyed :(, created :) 메세지가 3개가 등장하였습니다.
-// 이유는 index.js의 React.StrictMode 가 활성화 되어 있어서네요.
-// 급하게 강의를 따라하느라 끄라고 했었는지는 기억이 잘 나지 않지만 혹시 저와 같이 함수가 두번 실행되는 경우 (double invoke)가 발생하면 위의 코드를 주석처리 하시면 될것 같습니다.
-
-// strictmode의 경우, 개발 과정중 안전을 위해 켜는 기능이며 배포시에 자동으로 해제된다고 합니다.
 
 
 export default App;
