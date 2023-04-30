@@ -1,56 +1,95 @@
-import { useState, useEffect } from 'react';
-import styles from './App.module.css';
-import Button from './Button';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
+import Home from "./routes/Home";
+import Detail from "./routes/Detail";
 
 function App() {
-  const [toDo, setToDo] = useState("");
-  const onChange = (event) => setToDo(event.target.value);
-  // 4. 여러개의 todo를 받기 위하여 빈 array를 하나 정의한다
-  const [toDos, setToDos] = useState([]);
-  console.log(toDo);
-  // 2. 새로고침되는 것을 방지하기 위하여, event 하위의 preventDefault 함수를 이용
-  const onSubmit = (event) => {
-    event.preventDefault();
-    // 3. 아무것도 입력 안해놓고 submit되는 것을 막기 위하여 조건을 걸어줌
-    if (toDo === "") {
-      return;
-    } else {
-      // 5. 배열에 추가. 그런데 state변수이므로 push를 통해 직접 넣을 수는 없음. 직접 state 변수를 수정할 수는 없기 때문에, setState를 사용한다. 인자에는 함수를 넣는데, 들어가는 함수의 인자로 기존의 state변수 값이 넘어가게 된다.
-      // 이 과정에서, 기존의 배열에서 새로운 원소를 추가하여 새로운 배열을 만들고 싶을 때, 스프레드 연산자를 사용하면 된다. 그냥 [toDo, currArray]이런식으로 하면 배열 안에 currArray배열이 다시 들어가는 형태가 되어버림.
-      // 결국, state 변수 변경을 위해, setState 함수에 어떤 특정 값을 넣어줄 수도 있고, 함수를 넣어줄 수도 있다는 것이 된다. 만약 함수를 넣어준다면, 첫번째 인자로 현재 state 값을 보낸다. 이름은 무엇을 하든 자유
-      setToDos((currArray) => [toDo, ...currArray])
-      setToDo("");
-      // 여기서 로그를 찍어보면 최근에 추가한 것이 반영이 되어있지 않음...
-      // console.log(toDos);
-    }
-  };
-  console.log(toDos);
-
-  // form 태그 하위의 onSubmit 콜백 : 폼이 버튼 클릭 등을 통해 제출되었을 때의 동작을 정의
   return (
-    <div>
-      <h1>My ToDos ({toDos.length})</h1>
-      <form onSubmit={onSubmit}>
-        <input onChange={onChange} value={toDo} type='text' placeholder="write your to dos" />
-        {/* 1. 버튼 태그의 경우, 기본적으로 설정된 동작 타입이 submit이므로 버튼을 누르면 기본적으로 제출로 처리되어 새로고침됨 */}
-        <button>Add To Do</button>
-      </form>
-      <hr />
-      {/* toDos 배열 안의 아이템들을 각각 하나의 컴포넌트로 만들어주기 위하여, map() 함수를 이용 
-      map() 안에 들어가는 것은 함수인데, 그 함수는 배열의 모든 요소에 대해 각각 실행된다는 특징이 있음. 모든 요소에 대해 실행되고 그 변경된 값은 toDos 배열로 다시 산출된다. 즉 toDos 배열이 새로운 값을 변경되어 출력된다는 것.
-      map안에 들어가는 함수의 매개변수 중 첫번째 매개변수를 이용할 수 있는데(이름은 무엇이든 상관없음), 그 매개변수는 배열의 현재 처리되는 item을 가리킨다. 
-      추가적으로, 리액트에서는 li의 각 요소에 key값을 설정해주어야 한다. 각 li 요소를 구분해야 하기 때문(콘솔 경고 방지). 따라서, map 함수의 두번째 매개변수인 index값을 이용하여 key값을 설정한다.*/}
-      <ul>
-        {toDos.map((item, index) => 
-          <li key={index}>{item}</li>
-        )}
-      
-      </ul>
-      
-    </div>
-  );
+  <Router>
+    <Routes>
+      <Route path="/hello" element={<h1>hello</h1>}>
+      </Route>
+      <Route path="/" element={<Home />}>
+        {/* 여기에 컴포넌트를 작성한다. 
+        보통, path가 "/"라면 홈화면을 의미
+      element 속성에는 띄워줄 component를 import하기만 하면 끝. 앱을 실행해보면, 도메인 뒤에 "/"만 붙어있음을 알 수 있다. 이렇게 함으로써, url마다 정확히 원하는 컴포넌트를 보여줄 수 있게 된다.*/}
+      </Route>
+      <Route path="/movie/:id" element={<Detail />}>
+      </Route>
+    </Routes>
+  </Router>
+  )
 }
 
-
-
 export default App;
+
+/*
+react.js 앱에서 페이지를 전환하는 방법
+화면의 어느 요소를 눌렀을 때, 다른 페이지로 넘어가는 방법
+
+map을 이용하여, 배열 안의 여러 요소들을 순회하여 각 요소들을 렌더링하려고 할 때, 반드시 key 속성을 넣어주어야 한다. key는 각각의 아이템마다 유일해야 한다.
+
+React Router란?
+페이지를 전환하기 위하여 사용되는 것.
+
+route : 각 하나의 화면, url 혹은 페이지와 대응된다.
+ex)
+home route : 모든 영화에 대한 개괄을 보여줌
+movie route : 각 영화에 대한 자세한 정보를 보여줌
+
+사용 방법
+https://reactrouter.com/en/6.11.0/start/tutorial
+1. 터미널에 다음과 같이 입력
+npm install react-router-dom
+
+2. 화면들을 담기 위하여 아래와 같이 2개의 폴더를 마련한다.
+- routes -> 하위에 Home.js 파일(컴포넌트)을 만든다. 이는 홈화면 하나를 위한 파일이다. -> 여태 App.js에서 작업한 것들을 모두 그곳으로 옮긴다.
+그리고, 영화에 대한 상세정보를 보여주는 화면을 만들기 위하여 Detail.js 라우터를 만든다.
+- components -> 하위에 Movie.js 컴포넌트를 만든다.
+
+3. 이러한 과정을 거치면, App.js에는 아무것도 남지 않게 된다.(return null;)
+이제 App.js가 하게 되는 역할은 router를 render하는 것이다. 
+
+url에 따라서, 각각의 다른 컴포넌트를 보여주기 위하여,
+4. route를 위해 필요한 것들을 import한다.
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
+
+참고로, BrowserRouter와 HashRouter가 있는데, BrowserRouter는 우리가 생각하는 그대로의 url을 나타내고, HashRouter는 뒤에 #이 붙는다는 것에서 차이가 있다.
+
+5. 형태
+<Router>
+  <Routes>
+    <Route path="url" element={<컴포넌트명 />}>
+    </Route>
+  </Routes>
+</Router>
+
+6. 한 Route에서 다른 Route로 이동하는 방법
+- 영화 제목 클릭 시, Detail 스크린으로 이동
+- HTML에서 a 태그 이용 가능
+예를 들어, Movie 컴포넌트의 제목 h2 태그를 클릭하면 이동하도록 하기 위해 <h2><a href="/movie"></a></h2> 이런 식으로
+- a태그를 사용하는 것의 문제점 : 페이지 전체가 다시 실행됨 => 이는 React의 장점을 십분 활용하지 못하는 방법이다.
+- 이 때, "Link"라는 컴포넌트를 사용한다.
+- Link : 브라우저 새로고침 없이 다른 페이지로 이동할 수 있도록 하는 컴포넌트
+- Link의 to 속성을 이용. to 속성에 이동할 url을 작성
+
+6. 동적 url 만들기 - parameters
+'동적' : url에 변수를 넣을 수 있다는 의미
+ex) /movie/123
+여기서 123은 영화의 넘버를 나타내는 변수를 의미
+
+사용법 : route 컴포넌트에서 ":변수명" 명시
+ex) /user/:id
+=> /user/10 : 아이디가 10번인 user
+그 후, 컴포넌트에서 Link 태그의 to 속성에 
+식별자 변수를 넣는다.`${변수명}`
+
+7. useParams 사용(Detail 컴포넌트 참고)
+*/
